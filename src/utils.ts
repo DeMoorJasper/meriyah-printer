@@ -1,4 +1,5 @@
 import { ESTree } from "meriyah";
+
 import { State } from "./core";
 import { NEEDS_PARENTHESES, OPERATOR_PRECEDENCE } from "./constants";
 

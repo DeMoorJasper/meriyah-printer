@@ -1,4 +1,4 @@
-import type { ExpressionPrecedence } from "./types";
+import type { ExpressionPrecedenceType } from "./types";
 
 export const OPERATOR_PRECEDENCE = {
   "||": 3,
@@ -30,7 +30,7 @@ export const OPERATOR_PRECEDENCE = {
 // Enables parenthesis regardless of precedence
 export const NEEDS_PARENTHESES = 17;
 
-export const EXPRESSIONS_PRECEDENCE: ExpressionPrecedence = {
+export const EXPRESSIONS_PRECEDENCE: ExpressionPrecedenceType = {
   // Definitions
   ArrayExpression: 20,
   TaggedTemplateExpression: 20,

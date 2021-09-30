@@ -1,18 +1,19 @@
 import type { ESTree } from "meriyah";
+
 import type { State } from "./core";
 
-export type ExpressionPrecedence = Partial<{
+export type ExpressionPrecedenceType = Partial<{
   [type in ESTree.Node["type"]]: number;
 }>;
 
-export type CodeGenerator = Partial<{
+export type CodeGeneratorType = Partial<{
   [type in ESTree.Node["type"]]: (node: ESTree.Node, state: State) => void;
 }>;
 
 /**
  * Code generator options.
  */
-export interface Options {
+export interface IOptions {
   /**
    * String to use for indentation, defaults to `"␣␣"`.
    */
@@ -32,10 +33,10 @@ export interface Options {
   /**
    * Custom code generator logic.
    */
-  generator?: CodeGenerator;
+  generator?: CodeGeneratorType;
 
   /**
    * Precedence of expressions
    */
-  expressionsPrecedence?: ExpressionPrecedence;
+  expressionsPrecedence?: ExpressionPrecedenceType;
 }
