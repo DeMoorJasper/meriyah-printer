@@ -10,8 +10,6 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - name: Setup | Ensure registry access
-        run: npm whoami
       - name: Install dependencies
         run: yarn
       - name: Typecheck
@@ -21,5 +19,6 @@ jobs:
       - run: echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > .npmrc
         env:
           NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+      - run: npm whoami
       - name: Release
         run: npm publish
