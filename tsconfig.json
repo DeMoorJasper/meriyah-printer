@@ -4,13 +4,12 @@
     "target": "ESNext",
     "lib": ["ES2020"],
     "module": "CommonJS",
-    "strict": true,
-    "noImplicitAny": true,
+    // "strict": true,
+    // "noImplicitAny": true,
     "baseUrl": ".",
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "sourceMap": true,
     "noEmit": true
   },
   "exclude": ["node_modules", "dist"]
