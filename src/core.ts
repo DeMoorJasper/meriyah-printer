@@ -1,6 +1,7 @@
 import type { ExpressionPrecedence, Options, CodeGenerator } from "./types";
 import { EXPRESSIONS_PRECEDENCE } from "./constants";
 import { GENERATOR } from "./generator";
+import { ESTree } from "meriyah";
 
 export class State {
   output: string = "";
@@ -12,6 +13,7 @@ export class State {
   writeComments: boolean;
 
   constructor(options: Options = {}) {
+    // @ts-ignore
     this.generator = options.generator != null ? options.generator : GENERATOR;
     this.expressionsPrecedence =
       options.expressionsPrecedence != null
@@ -30,7 +32,7 @@ export class State {
   }
 }
 
-export function generate(node, options) {
+export function generate(node: ESTree.Program, options?: Options) {
   /*
     Returns a string representing the rendered code of the provided AST `node`.
     The `options` are:
