@@ -12,10 +12,8 @@ jobs:
           node-version: '14'
       - name: Install dependencies
         run: yarn
-      - name: Typecheck
-        run: yarn typecheck
-      - name: Bundle
-        run: yarn bundle
+      - name: Build
+        run: yarn build
       - run: echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > .npmrc
         env:
           NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}

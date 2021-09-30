@@ -1,8 +1,7 @@
 {
   "name": "meriyah-printer",
-  "version": "1.0.1",
-  "main": "dist/bundle.js",
-  "module": "dist/bundle.mjs",
+  "version": "1.0.2",
+  "main": "dist/src/index.js",
   "types": "src/index.ts",
   "license": "MIT",
   "files": [
@@ -12,11 +11,9 @@
     "LICENSE"
   ],
   "scripts": {
-    "typecheck": "tsc",
-    "test": "jest --runInBand",
-    "bundle:esm": "esbuild ./src/index.ts --outfile=dist/bundle.mjs --bundle --format=esm",
-    "bundle:cjs": "esbuild ./src/index.ts --outfile=dist/bundle.js --bundle --format=cjs",
-    "bundle": "yarn bundle:esm && yarn bundle:cjs"
+    "typecheck": "tsc --noEmit",
+    "test": "jest --runInBand --verbose",
+    "build": "tsc"
   },
   "devDependencies": {
     "@types/jest": "^27.0.2",
