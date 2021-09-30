@@ -1,6 +1,6 @@
 {
   "name": "meriyah-printer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "dist/bundle.js",
   "module": "dist/bundle.mjs",
   "types": "src/index.ts",
@@ -8,7 +8,8 @@
   "files": [
     "dist",
     "src",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "typecheck": "tsc",
