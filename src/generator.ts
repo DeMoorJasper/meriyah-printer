@@ -10,13 +10,6 @@ import {
   hasCallExpression,
 } from "./utils";
 
-let ForInStatement,
-  FunctionDeclaration,
-  RestElement,
-  BinaryExpression,
-  ArrayExpression,
-  BlockStatement;
-
 export const GENERATOR = {
   // Default generator.
   Program(node, state) {
@@ -40,7 +33,7 @@ export const GENERATOR = {
       formatComments(state, node.trailingComments, indent, lineEnd);
     }
   },
-  BlockStatement: (BlockStatement = function (node, state) {
+  BlockStatement(node, state) {
     const indent = state.indent.repeat(state.indentLevel++);
     const { lineEnd, writeComments } = state;
     const statementIndent = indent + state.indent;
@@ -78,15 +71,19 @@ export const GENERATOR = {
     }
     state.write("}");
     state.indentLevel--;
-  }),
-  ClassBody: BlockStatement,
+  },
+  ClassBody(node, state) {
+    this.BlockStatement(node, state);
+  },
   EmptyStatement(node, state) {
     state.write(";");
   },
-  ExpressionStatement(node, state) {
+  ExpressionStatement(node: ESTree.ExpressionStatement, state: State) {
     const precedence = state.expressionsPrecedence[node.expression.type];
     if (
+      node.expression.type === "AssignmentExpression" ||
       precedence === NEEDS_PARENTHESES ||
+      // @ts-ignore
       (precedence === 3 && node.expression.left.type[0] === "O")
     ) {
       // Should always have parentheses or is an AssignmentExpression to an ObjectPattern
@@ -239,7 +236,7 @@ export const GENERATOR = {
     state.write(") ");
     this[node.body.type](node.body, state);
   },
-  ForInStatement: (ForInStatement = function (node, state) {
+  ForInStatement(node, state) {
     state.write(`for ${node.await ? "await " : ""}(`);
     const { left } = node;
     if (left.type[0] === "V") {
@@ -252,12 +249,14 @@ export const GENERATOR = {
     this[node.right.type](node.right, state);
     state.write(") ");
     this[node.body.type](node.body, state);
-  }),
-  ForOfStatement: ForInStatement,
+  },
+  ForOfStatement(node, state) {
+    this.ForInStatement(node, state);
+  },
   DebuggerStatement(node, state) {
     state.write("debugger;", node);
   },
-  FunctionDeclaration: (FunctionDeclaration = function (node, state) {
+  FunctionDeclaration(node, state) {
     state.write(
       (node.async ? "async " : "") +
         (node.generator ? "function* " : "function ") +
@@ -267,8 +266,10 @@ export const GENERATOR = {
     formatSequence(state, node.params);
     state.write(" ");
     this[node.body.type](node.body, state);
-  }),
-  FunctionExpression: FunctionDeclaration,
+  },
+  FunctionExpression(node, state) {
+    this.FunctionDeclaration(node, state);
+  },
   VariableDeclaration(node, state) {
     formatVariableDeclaration(state, node);
     state.write(";");
@@ -357,7 +358,10 @@ export const GENERATOR = {
     this[node.source.type](node.source, state);
     state.write(")");
   },
-  ExportDefaultDeclaration(node, state) {
+  ExportDefaultDeclaration(
+    node: ESTree.ExportDefaultDeclaration,
+    state: State
+  ) {
     state.write("export default ");
     this[node.declaration.type](node.declaration, state);
     if (
@@ -435,7 +439,9 @@ export const GENERATOR = {
     this[node.value.body.type](node.value.body, state);
   },
   ClassExpression(node, state) {
+    state.write("(");
     this.ClassDeclaration(node, state);
+    state.write(")");
   },
   ArrowFunctionExpression(node, state) {
     state.write(node.async ? "async " : "", node);
@@ -465,11 +471,13 @@ export const GENERATOR = {
   Super(node, state) {
     state.write("super", node);
   },
-  RestElement: (RestElement = function (node, state) {
+  RestElement(node, state) {
     state.write("...");
     this[node.argument.type](node.argument, state);
-  }),
-  SpreadElement: RestElement,
+  },
+  SpreadElement(node, state) {
+    this.RestElement(node, state);
+  },
   YieldExpression(node, state) {
     state.write(node.delegate ? "yield*" : "yield");
     if (node.argument) {
@@ -504,7 +512,7 @@ export const GENERATOR = {
     this[node.tag.type](node.tag, state);
     this[node.quasi.type](node.quasi, state);
   },
-  ArrayExpression: (ArrayExpression = function (node, state) {
+  ArrayExpression(node, state) {
     state.write("[");
     if (node.elements.length > 0) {
       const { elements } = node,
@@ -525,8 +533,10 @@ export const GENERATOR = {
       }
     }
     state.write("]");
-  }),
-  ArrayPattern: ArrayExpression,
+  },
+  ArrayPattern(node, state) {
+    this.ArrayExpression(node, state);
+  },
   ObjectExpression(node, state) {
     const indent = state.indent.repeat(state.indentLevel++);
     const { lineEnd, writeComments } = state;
@@ -674,7 +684,7 @@ export const GENERATOR = {
     state.write(" = ");
     this[node.right.type](node.right, state);
   },
-  BinaryExpression: (BinaryExpression = function (node, state) {
+  BinaryExpression(node, state) {
     const isIn = node.operator === "in";
     if (isIn) {
       // Avoids confusion in `for` loops initializers
@@ -686,8 +696,10 @@ export const GENERATOR = {
     if (isIn) {
       state.write(")");
     }
-  }),
-  LogicalExpression: BinaryExpression,
+  },
+  LogicalExpression(node, state) {
+    this.BinaryExpression(node, state);
+  },
   ConditionalExpression(node, state) {
     const { test } = node;
     const precedence = state.expressionsPrecedence[test.type];

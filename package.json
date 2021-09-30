@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "typecheck": "tsc",
-    "test": "jest",
+    "test": "jest --runInBand",
     "bundle:esm": "esbuild ./src/index.ts --outfile=dist/bundle.mjs --bundle --format=esm",
     "bundle:cjs": "esbuild ./src/index.ts --outfile=dist/bundle.js --bundle --format=cjs",
     "bundle": "yarn bundle:esm && yarn bundle:cjs"
@@ -23,6 +23,7 @@
     "globby": "^11.0.4",
     "jest": "^27.2.4",
     "meriyah": "^4.2.0",
+    "test262-parser-tests": "^0.0.5",
     "ts-jest": "^27.0.5",
     "typescript": "^4.4.3"
   }

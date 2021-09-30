@@ -2530,6 +2530,11 @@ test-exclude@^6.0.0:
     glob "^7.1.4"
     minimatch "^3.0.4"
 
+test262-parser-tests@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/test262-parser-tests/-/test262-parser-tests-0.0.5.tgz#995979361ad782a2c6cd1e11fc068f4acb3635ad"
+  integrity sha512-hg5TBO+rDo/aJy1XgHPIkcChIeLjD0kx/g37LtYmZuPR3WHabRpD1M3iY0m2C3eNk+HAlWiB09Wfc5jd9X8i7A==
+
 throat@^6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/throat/-/throat-6.0.1.tgz#d514fedad95740c12c2d7fc70ea863eb51ade375"
