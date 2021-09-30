@@ -41,7 +41,12 @@ describe("Fixtures", () => {
         ranges: false,
       });
 
-      expect(outputAST).toEqual(inputAST);
+      try {
+        expect(outputAST).toEqual(inputAST);
+      } catch (err) {
+        console.error(output);
+        throw err;
+      }
     });
   }
 });

@@ -5,9 +5,9 @@ export type ExpressionPrecedence = Partial<{
   [type in ESTree.Node["type"]]: number;
 }>;
 
-export type CodeGenerator = {
+export type CodeGenerator = Partial<{
   [type in ESTree.Node["type"]]: (node: ESTree.Node, state: State) => void;
-};
+}>;
 
 /**
  * Code generator options.

@@ -1,4 +1,6 @@
+import { ESTree } from "meriyah";
 import { NEEDS_PARENTHESES } from "./constants";
+import { State } from "./core";
 import {
   formatComments,
   formatVariableDeclaration,
@@ -56,7 +58,11 @@ export const GENERATOR = {
           formatComments(state, statement.comments, statementIndent, lineEnd);
         }
         state.write(statementIndent);
-        this[statement.type](statement, state);
+        try {
+          this[statement.type](statement, state);
+        } catch (err) {
+          console.log(statement);
+        }
         state.write(lineEnd);
       }
       state.write(indent);
@@ -716,6 +722,22 @@ export const GENERATOR = {
     }
     formatSequence(state, node["arguments"]);
   },
+  PrivateIdentifier(node: ESTree.PrivateIdentifier, state: State) {
+    state.write("#" + node.name);
+  },
+  PropertyDefinition(node: ESTree.PropertyDefinition, state: State) {
+    if (node.static) {
+      state.write("static ");
+    }
+
+    this[node.key.type](node.key, state);
+
+    if (node.value) {
+      state.write(" = ");
+      this[node.value.type](node.value, state);
+    }
+    state.write(";" + state.lineEnd);
+  },
   CallExpression(node, state) {
     const precedence = state.expressionsPrecedence[node.callee.type];
     if (
@@ -788,19 +810,19 @@ export const GENERATOR = {
   },
   // <div></div>
   JSXElement(node, state) {
-    state.write('<');
+    state.write("<");
     this[node.openingElement.type](node.openingElement, state);
     if (node.closingElement) {
-      state.write('>');
+      state.write(">");
       for (let i = 0; i < node.children.length; i++) {
         const child = node.children[i];
         this[child.type](child, state);
       }
-      state.write('</');
+      state.write("</");
       this[node.closingElement.type](node.closingElement, state);
-      state.write('>');
+      state.write(">");
     } else {
-      state.write(' />');
+      state.write(" />");
     }
   },
   // <div>
@@ -822,27 +844,27 @@ export const GENERATOR = {
   // Member.Expression
   JSXMemberExpression: function JSXMemberExpression(node, state) {
     this[node.object.type](node.object, state);
-    state.write('.');
+    state.write(".");
     this[node.property.type](node.property, state);
   },
   // attr="something"
   JSXAttribute: function JSXAttribute(node, state) {
-    state.write(' ');
+    state.write(" ");
     this[node.name.type](node.name, state);
-    state.write('=');
+    state.write("=");
     this[node.value.type](node.value, state);
   },
   // namespaced:attr="something"
   JSXNamespacedName: function JSXNamespacedName(node, state) {
     this[node.namespace.type](node.namespace, state);
-    state.write(':');
+    state.write(":");
     this[node.name.type](node.name, state);
   },
   // {expression}
   JSXExpressionContainer: function JSXExpressionContainer(node, state) {
-    state.write('{');
+    state.write("{");
     this[node.expression.type](node.expression, state);
-    state.write('}');
+    state.write("}");
   },
   JSXText(node, state) {
     state.write(node.value);

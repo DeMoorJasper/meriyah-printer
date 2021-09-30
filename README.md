@@ -1,6 +1,6 @@
 # Meriyah Printer
 
-Tiny and fast JavaScript code generator that is compatible with all nodes meriyah supports.
+Tiny and fast JavaScript code generator that is compatible with all nodes meriyah supports, fork of the `astring` library.
 
 A work in progress...
 

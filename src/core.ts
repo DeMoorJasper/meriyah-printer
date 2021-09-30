@@ -13,7 +13,6 @@ export class State {
   writeComments: boolean;
 
   constructor(options: Options = {}) {
-    // @ts-ignore
     this.generator = options.generator != null ? options.generator : GENERATOR;
     this.expressionsPrecedence =
       options.expressionsPrecedence != null
