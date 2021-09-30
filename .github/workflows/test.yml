@@ -1,0 +1,17 @@
+name: test
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: bahmutov/npm-install@v1.1.0
+      - name: Typecheck
+        run: yarn typecheck
+      - name: Bundle
+        run: yarn bundle
+      - name: Test
+        run: yarn test
