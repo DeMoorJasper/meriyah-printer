@@ -52,11 +52,7 @@ export const GENERATOR = {
           formatComments(state, statement.comments, statementIndent, lineEnd);
         }
         state.write(statementIndent);
-        try {
-          this[statement.type](statement, state);
-        } catch (err) {
-          console.log(statement);
-        }
+        this[statement.type](statement, state);
         state.write(lineEnd);
       }
       state.write(indent);
