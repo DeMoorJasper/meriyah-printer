@@ -78,7 +78,6 @@ export const GENERATOR = {
   ExpressionStatement(node: ESTree.ExpressionStatement, state: State) {
     const precedence = state.expressionsPrecedence[node.expression.type];
     if (
-      node.expression.type === "AssignmentExpression" ||
       precedence === NEEDS_PARENTHESES ||
       // @ts-ignore
       (precedence === 3 && node.expression.left.type[0] === "O")
